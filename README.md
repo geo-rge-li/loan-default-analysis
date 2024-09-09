@@ -9,8 +9,7 @@ Fintechs are increasingly relying on data beyond just a credit score to make cre
 #### Research Question
 What factors are more predictive of whether a person is going to be able to pay back a loan or default?
 #### Data Sources
-What data will you use to answer you question?
-
+Loan default dataset from Kaggle: https://www.kaggle.com/datasets/marcbuji/loan-default-prediction Links to an external site.
 #### Methodology
 Clustering Algorithms are necessary to determine the most significant features that contribute to whether someone defaults or not.
 
@@ -18,7 +17,12 @@ Classification algorithms to help predict whether someone defaults or not.
 
 Hyperparams need to be tuned using grid search.
 #### Results
-What did your research find?
+Using Logistic Regression, Decision Trees, and Random Forest, we found that the most consequential feature that factors into defaults are the total amount of assets which is shown as Asst_Reg_encoded.
+![feature_importance_deci_tree.png](images/feature_importance_deci_tree.png)
+![feature_importance_log_reg.png](images/feature_importance_log_reg.png)
+![feature_importance_random_forest.png](images/feature_importance_random_forest.png)
+The other common feature that seems to be found pretty important in all three models is the Debt_to_Income ratio. Both of those would make sense in that if a person has fewer assets or higher amount of existing debt, the likelihood of default is significantly higher. 
+
 
 #### Next steps
 What suggestions do you have for next steps?
