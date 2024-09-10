@@ -12,10 +12,9 @@ What factors are more predictive of whether a person is going to be able to pay 
 Loan default dataset from Kaggle: https://www.kaggle.com/datasets/marcbuji/loan-default-prediction Links to an external site.
 #### Methodology
 Clustering Algorithms are necessary to determine the most significant features that contribute to whether someone defaults or not.
-
 Classification algorithms to help predict whether someone defaults or not.
-
 Hyperparams need to be tuned using grid search.
+It would be optimal to use cross validation and to simplify things, I will be using 5-fold cross validation.
 #### Results
 Using Logistic Regression, Decision Trees, and Random Forest, we found that the most consequential feature that factors into defaults are the total amount of assets which is shown as Asst_Reg_encoded.
 ![feature_importance_deci_tree.png](images/feature_importance_deci_tree.png)
@@ -100,12 +99,27 @@ Some Raw Results:
         Best overall model: Random Forest
         Best overall test accuracy: 0.8192
         Runtime for best model: 386.86 seconds
-#### Next steps
-What suggestions do you have for next steps?
 
+If we go by the accuracy measure, Random Forest has the best accuracy. However, it had the longest execution time of all the models. However, given that it may be important to be accurate in scenarios such as making loan decisions, 
+that might be a tradeoff that is worth it.
+
+However, the precision score is something that would be considered important as well. For people more likely to default, you may want to make sure your model predicts their cases precisely so that 
+you do not end up loaning to someone who has a strong likelihood of defaulting. In this case, Random Forest again has the best precision score for the default (1) class. However a fintech may also want to 
+weight model that predicts who might not default which would be useful to determine a population to market financial products to in hopes that they sign up for a loan. In this case, we'd want the Decision Tree model. 
+
+
+#### Next steps
+If possible, the goal would be to gather some real world results and use them for predictions. Other steps would be to optimize the number of features and use permutation importance to drop the least
+important ones which could optimize the models further.
 #### Outline of project
 
 - [Link to notebook 1]([analysis.ipynb](analysis.ipynb))
 
 
 ##### Contact and Further Information
+George Li
+gzli92@gmail.com
+George.Li@bestegg.com (work)
+LinkedIn: https://www.linkedin.com/in/gli92
+
+```
