@@ -17,9 +17,11 @@ Hyperparams need to be tuned using grid search.
 It would be optimal to use cross validation and to simplify things, I will be using 5-fold cross validation.
 #### Results
 Using Logistic Regression, Decision Trees, and Random Forest, we found that the most consequential feature that factors into defaults are the total amount of assets which is shown as Asst_Reg_encoded.
- !![feature_importance_deci_tree.png](images/feature_importance_deci_tree.png)
- !![feature_importance_log_reg.png](images/feature_importance_log_reg.png)
- !![feature_importance_random_forest.png](images/feature_importance_random_forest.png)
+ ![feature_importance_deci_tree.png](images/feature_importance_deci_tree.png)
+
+ ![feature_importance_log_reg.png](images/feature_importance_log_reg.png)
+
+ ![feature_importance_random_forest.png](images/feature_importance_random_forest.png)
 The other common feature that seems to be found pretty important in all three models is the Debt_to_Income ratio. Both of those would make sense in that if a person has fewer assets or higher amount of existing debt, the likelihood of default is significantly higher. 
 
 Some Raw Results:
