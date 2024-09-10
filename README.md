@@ -118,8 +118,11 @@ important ones which could optimize the models further.
 
 ##### Contact and Further Information
 George Li
+
 gzli92@gmail.com
+
 George.Li@bestegg.com (work)
+
 LinkedIn: https://www.linkedin.com/in/gli92
 
 ```
