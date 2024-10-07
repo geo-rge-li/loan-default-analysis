@@ -16,107 +16,173 @@ Classification algorithms to help predict whether someone defaults or not.
 Hyperparams need to be tuned using grid search.
 It would be optimal to use cross validation and to simplify things, I will be using 5-fold cross validation.
 #### Results
-Using Logistic Regression, Decision Trees, and Random Forest, we found that the most consequential feature that factors into defaults are the total amount of assets which is shown as Asst_Reg_encoded.
+Using LASSO to select the top 5 most important features, we found that those features were: ['Inquiries', 'Validation', 'Duration', 'Designation', 'File_Status']
+
+After noticing this, I decided that I should drop the File_Status column because it might be messing up the results. This is because those who have a fully paid account
+would not default for sure but that tells us nothing useful since "I'm fully paid" implies "I'm not in default" and thus would have high multi-colinearity.
+
+After dropping that feature, this was the new top 5: ['Asst_Reg', 'Inquiries', 'Validation', 'Total_Unpaid_CL', 'Designation']
+Using Logistic Regression, Decision Trees, Random Forest, and KNN, we determined that each model weighted the importance of these features quite differently.
+
  ![feature_importance_deci_tree.png](images/feature_importance_deci_tree.png)
 
  ![feature_importance_log_reg.png](images/feature_importance_log_reg.png)
 
  ![feature_importance_random_forest.png](images/feature_importance_random_forest.png)
-The other common feature that seems to be found pretty important in all three models is the Debt_to_Income ratio. Both of those would make sense in that if a person has fewer assets or higher amount of existing debt, the likelihood of default is significantly higher. 
+
+ ![feature_importance_random_forest.png](images/feature_importance_knn.png)
+
+That said, the models all seemed to factor in designation and total unpaid CL as more important features. This might make sense since having a 
+higher unpaid debts usually means default could be more likely and the designation is the type of job they have which would determine a general income range as well as a general
+amount of assets. 
 
 Some Raw Results:
 
-        Results for Logistic Regression:
-        Best Parameters: {'C': 0.001, 'penalty': 'l2'}
-        Best Cross-Validation Score: 0.8105
-        Test Accuracy: 0.8122
-        Runtime: 1.95 seconds
-        Classification Report:
-                      precision    recall  f1-score   support
-        
-                   0       0.82      0.99      0.90     10966
-                   1       0.49      0.02      0.04      2533
-        
-            accuracy                           0.81     13499
-           macro avg       0.65      0.51      0.47     13499
-        weighted avg       0.75      0.81      0.74     13499
-        
-        
-        Top 5 Most Important Features:
-        Asst_Reg_encoded          0.436327
-        Gross_Collection          0.282641
-        Debt_to_Income            0.172694
-        File_Status_fully paid    0.139858
-        File_Status_whole         0.139858
-        dtype: float64
-        
-        Results for Decision Tree:
-        Best Parameters: {'max_depth': 5, 'min_samples_leaf': 1, 'min_samples_split': 2}
-        Best Cross-Validation Score: 0.8122
-        Test Accuracy: 0.8129
-        Runtime: 9.75 seconds
-        Classification Report:
-                      precision    recall  f1-score   support
-        
-                   0       0.83      0.97      0.89     10966
-                   1       0.50      0.15      0.23      2533
-        
-            accuracy                           0.81     13499
-           macro avg       0.67      0.56      0.56     13499
-        weighted avg       0.77      0.81      0.77     13499
-        
-        
-        Top 5 Most Important Features:
-        Asst_Reg_encoded          0.762356
-        Duration_5 years          0.091902
-        Gross_Collection          0.070318
-        File_Status_fully paid    0.028482
-        File_Status_whole         0.027476
-        dtype: float64
-        
-        Results for Random Forest:
-        Best Parameters: {'max_depth': None, 'min_samples_leaf': 2, 'min_samples_split': 5, 'n_estimators': 200}
-        Best Cross-Validation Score: 0.8202
-        Test Accuracy: 0.8192
-        Runtime: 386.86 seconds
-        Classification Report:
-                      precision    recall  f1-score   support
-        
-                   0       0.82      0.99      0.90     10966
-                   1       0.63      0.09      0.16      2533
-        
-            accuracy                           0.82     13499
-           macro avg       0.73      0.54      0.53     13499
-        weighted avg       0.79      0.82      0.76     13499
-        
-        
-        Top 5 Most Important Features:
-        Asst_Reg_encoded       0.166446
-        Designation_encoded    0.062131
-        Debt_to_Income         0.061590
-        Present_Balance        0.057228
-        Usage_Rate             0.056033
-        dtype: float64
-        
-        Best overall model: Random Forest
-        Best overall test accuracy: 0.8192
-        Runtime for best model: 386.86 seconds
+     Results for Logistic Regression:
+     Best Parameters: {'C': 1, 'penalty': 'l2'}
+     Best Cross-Validation F1 Score: 0.0198
+     Test F1 Score: 0.0268
+     Runtime: 1.45 seconds
+     Classification Report:
+                   precision    recall  f1-score   support
+     
+                0       0.81      1.00      0.90     14226
+                1       0.52      0.01      0.03      3274
+     
+         accuracy                           0.81     17500
+        macro avg       0.67      0.51      0.46     17500
+     weighted avg       0.76      0.81      0.73     17500
+     
+     
+     Feature Importance:
+     Asst_Reg           0.092033
+     Inquiries          0.178322
+     Validation         0.203739
+     Total_Unpaid_CL    0.261955
+     Designation        0.203760
+     dtype: float64
+     
+     Results for Decision Tree:
+     Best Parameters: {'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 2}
+     Best Cross-Validation F1 Score: 0.0933
+     Test F1 Score: 0.0797
+     Runtime: 1.41 seconds
+     Classification Report:
+                   precision    recall  f1-score   support
+     
+                0       0.81      0.95      0.88     14226
+                1       0.20      0.05      0.08      3274
+     
+         accuracy                           0.78     17500
+        macro avg       0.50      0.50      0.48     17500
+     weighted avg       0.70      0.78      0.73     17500
+     
+     
+     Feature Importance:
+     Asst_Reg           0.064061
+     Inquiries          0.125015
+     Validation         0.155368
+     Total_Unpaid_CL    0.089860
+     Designation        0.565695
+     dtype: float64
+     
+     Results for Random Forest:
+     Best Parameters: {'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 100}
+     Best Cross-Validation F1 Score: 0.0948
+     Test F1 Score: 0.0692
+     Runtime: 129.22 seconds
+     Classification Report:
+                   precision    recall  f1-score   support
+     
+                0       0.82      0.98      0.89     14226
+                1       0.34      0.04      0.07      3274
+     
+         accuracy                           0.81     17500
+        macro avg       0.58      0.51      0.48     17500
+     weighted avg       0.73      0.81      0.74     17500
+     
+     
+     Feature Importance:
+     Asst_Reg           0.036219
+     Inquiries          0.092022
+     Validation         0.076933
+     Total_Unpaid_CL    0.054818
+     Designation        0.740007
+     dtype: float64
+     
+     Results for KNN:
+     Best Parameters: {'metric': 'euclidean', 'n_neighbors': 3, 'weights': 'distance'}
+     Best Cross-Validation F1 Score: 0.2156
+     Test F1 Score: 0.1526
+     Runtime: 4.71 seconds
+     Classification Report:
+                   precision    recall  f1-score   support
+     
+                0       0.82      0.94      0.88     14226
+                1       0.29      0.10      0.15      3274
+     
+         accuracy                           0.78     17500
+        macro avg       0.55      0.52      0.51     17500
+     weighted avg       0.72      0.78      0.74     17500
+     
+     
+     Feature Importance:
+     Asst_Reg           0.000783
+     Inquiries          0.004554
+     Validation         0.002229
+     Total_Unpaid_CL    0.003823
+     Designation        0.006949
+     dtype: float64
+     
+     Best overall model: KNN
+     Best overall test F1 score: 0.1526
+     Runtime for best model: 4.71 seconds
 
-If we go by the accuracy measure, Random Forest has the best accuracy. However, it had the longest execution time of all the models. However, given that it may be important to be accurate in scenarios such as making loan decisions, 
-that might be a tradeoff that is worth it.
+If we go by the F1-score measure, KNN has the best accuracy. It also turned out to be the more performant model with random forest taking the longest. The top 5 features were selected to improve performance with the models.
+Otherwise, Random Forest might take even longer. 
 
-However, the precision score is something that would be considered important as well. For people more likely to default, you may want to make sure your model predicts their cases precisely so that 
-you do not end up loaning to someone who has a strong likelihood of defaulting. In this case, Random Forest again has the best precision score for the default (1) class. However a fintech may also want to 
-weight model that predicts who might not default which would be useful to determine a population to market financial products to in hopes that they sign up for a loan. In this case, we'd want the Decision Tree model. 
+However, it seems like the F1-scores for predicting no default were much better than predicting a default. And the overall test f1 scores did not appear to be particularly good although accuracy scores were decent for KNN and random forest. 
+In an effort to improve this, I tried this again with the top 10 features.
 
+I did get some modest improvement, but with 10 features, KNN was no longer the best model. Instead, Decision Trees became the best.
+
+    Results for Decision Tree:
+    Best Parameters: {'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 2}
+    Best Cross-Validation F1 Score: 0.2416
+    Test F1 Score: 0.2318
+    Runtime: 4.38 seconds
+    Classification Report:
+                  precision    recall  f1-score   support
+    
+               0       0.82      0.81      0.82     14226
+               1       0.22      0.24      0.23      3274
+    
+        accuracy                           0.70     17500
+       macro avg       0.52      0.52      0.52     17500
+    weighted avg       0.71      0.70      0.71     17500
+    
+    
+    Feature Importance:
+    Debt_to_Income     0.199514
+    State              0.148592
+    Lend_Amount        0.185981
+    Unpaid_Amount      0.076862
+    Asst_Reg           0.017244
+    File_Status        0.144429
+    Inquiries          0.043663
+    Validation         0.051791
+    Total_Unpaid_CL    0.029917
+    Designation        0.102007
+    dtype: float64
 
 #### Next steps
 If possible, the goal would be to gather some real world results and use them for predictions. Other steps would be to optimize the number of features and use permutation importance to drop the least
-important ones which could optimize the models further.
+important ones which could optimize the models further. In order to improve the models, more hyperparameter tuning and perhaps different levels of cross validation could be tried as well. While neural networks
+could also be explored, in the real world, using a neural network model may run afoul of regulations since it would be hard to explain why a credit decision was made.
 #### Outline of project
 
 - [analysis.ipynb](analysis.ipynb)
-
+- [analysis_top10 features.ipynb](analysis_top10 features.ipynb)
 
 ##### Contact and Further Information
 George Li
